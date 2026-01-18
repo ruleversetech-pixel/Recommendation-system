@@ -198,25 +198,6 @@
 <footer>
   © 2026 Department Review System | Confidential & Secure
 </footer>
-
-<script>
-const params = new URLSearchParams(window.location.search);
-
-document.getElementById("applicantName").innerText =
-  params.get("applicantName") || "—";
-
-document.getElementById("applicantDept").innerText =
-  params.get("applicantDept") || "—";
-
-document.getElementById("program").innerText =
-  params.get("program") || "—";
-
-document.getElementById("recommenderName").innerText =
-  params.get("recommenderName") || "—";
-
-document.getElementById("recommenderDept").innerText =
-  params.get("recommenderDept") || "—";
-</script>
 <script>
 const form = document.getElementById("recForm");
 
@@ -258,5 +239,6 @@ form.addEventListener("submit", function(event) {
 
 </body>
 </html>
+
 
 
