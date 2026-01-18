@@ -217,6 +217,45 @@ document.getElementById("recommenderName").innerText =
 document.getElementById("recommenderDept").innerText =
   params.get("recommenderDept") || "—";
 </script>
+<script>
+const form = document.getElementById("recForm");
+
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const params = new URLSearchParams(window.location.search);
+
+  const rowId = params.get("rowId");
+  const token = params.get("token");
+
+  if (!rowId || !token) {
+    alert("Invalid or missing secure link.");
+    return;
+  }
+
+  const status = document.querySelector('input[name="status"]:checked').value;
+  const reason = document.querySelector('textarea[name="reason"]').value;
+
+  const payload = new URLSearchParams();
+  payload.append("rowId", rowId);
+  payload.append("token", token);
+  payload.append("recommendation", status);
+  payload.append("reason", reason);
+
+  fetch("YOUR_APPS_SCRIPT_URL_HERE", {
+    method: "POST",
+    body: payload
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.message);
+  })
+  .catch(err => {
+    alert("Error sending data: " + err.message);
+  });
+});
+</script>
 
 </body>
 </html>
+
