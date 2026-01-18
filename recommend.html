@@ -219,11 +219,10 @@ document.getElementById("recommenderDept").innerText =
 <script>
 const form = document.getElementById("recForm");
 
-form.addEventListener("submit", function(event) {
-  event.preventDefault();   // <-- VERY IMPORTANT
+form.addEventListener("submit", async function(event) {
+  event.preventDefault();   // <-- CRITICAL
 
   const params = new URLSearchParams(window.location.search);
-
   const rowId = params.get("rowId");
   const token = params.get("token");
 
@@ -246,37 +245,54 @@ form.addEventListener("submit", function(event) {
   payload.append("recommendation", status);
   payload.append("reason", reason);
 
-  fetch("https://script.google.com/macros/s/AKfycbwsKxJBILo0JUFc1qhl2qNWxdVWaMeku-VjxXDtDPeGaqx6j_Dv_Aw2AhHOX1DsSXUZHA/exec", {
-    method: "POST",
-    body: payload,
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
-    }
-  })
-  .then(res => res.text())
-  .then(text => {
-    console.log("Raw response:", text);
+  try {
+    const res = await fetch(
+      "https://script.google.com/macros/s/AKfycbwsKxJBILo0JUFc1qhl2qNWxdVWaMeku-VjxXDtDPeGaqx6j_Dv_Aw2AhHOX1DsSXUZHA/exec",
+      {
+        method: "POST",
+        body: payload,
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      }
+    );
 
+    const text = await res.text();   // <-- IMPORTANT
+    console.log("Server raw response:", text);
+
+    let data;
     try {
-      const data = JSON.parse(text);
-      alert(data.message);
-
-      // Optional: show success message on page
-      document.body.innerHTML += "<p style='color:green;text-align:center;'>Submission saved successfully.</p>";
-
-    } catch (err) {
-      alert("Server error — check Apps Script Executions.");
+      data = JSON.parse(text);
+    } catch (e) {
+      throw new Error("Server returned invalid JSON");
     }
-  })
-  .catch(err => {
-    alert("Network error: " + err.message);
-  });
+
+    // Show clear success message ON THE PAGE
+    document.body.innerHTML += `
+      <div style="
+        margin:20px auto;
+        max-width:700px;
+        padding:15px;
+        text-align:center;
+        background:#e6fffa;
+        border:1px solid #38bdf8;
+        color:#065f46;
+        border-radius:8px;
+        font-weight:bold;">
+        ✅ Recommendation saved successfully!
+      </div>
+    `;
+
+  } catch (err) {
+    alert("Submission error: " + err.message);
+  }
 });
 </script>
 
 
 </body>
 </html>
+
 
 
 
