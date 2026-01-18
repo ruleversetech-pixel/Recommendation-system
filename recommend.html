@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Department Head Recommendation</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      margin: 0;
+      background: #eef2f7;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+      background: #1e40af;
+      color: white;
+      padding: 18px 30px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .container {
+      flex: 1;
+      padding: 35px 20px;
+    }
+
+    .card {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 25px 30px;
+      border-radius: 14px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    }
+
+    .title {
+      text-align: center;
+      color: #1e40af;
+      margin-bottom: 15px;
+    }
+
+    .sub {
+      text-align: center;
+      color: #555;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 25px;
+      margin-bottom: 20px;
+    }
+
+    .field {
+      background: #f7f9fc;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    hr {
+      margin: 20px 0;
+      border: none;
+      border-top: 1px solid #ddd;
+    }
+
+    .scale {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 10px 0 20px 0;
+    }
+
+    .scale label {
+      flex: 1;
+      min-width: 220px;
+      background: #f1f5f9;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .scale label:hover {
+      background: #e0e7ff;
+    }
+
+    textarea {
+      width: 100%;
+      height: 130px;
+      border-radius: 8px;
+      padding: 10px;
+      border: 1px solid #cbd5e1;
+      font-family: Arial;
+      font-size: 14px;
+    }
+
+    button {
+      margin-top: 15px;
+      width: 100%;
+      padding: 12px;
+      background: #2563eb;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #1e40af;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 12px;
+      background: #1e293b;
+      color: #e5e7eb;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  Department Head Recommendation Portal
+</header>
+
+<div class="container">
+  <div class="card">
+
+    <h2 class="title">Recommendation Form</h2>
+    <div class="sub">
+      Please review the applicant details carefully before submitting your recommendation.
+    </div>
+
+    <div class="grid">
+      <div class="field"><strong>Recommendee Name:</strong> <span id="applicantName"></span></div>
+      <div class="field"><strong>Recommendee Team:</strong> <span id="applicantDept"></span></div>
+      <div class="field"><strong>Program:</strong> <span id="program"></span></div>
+      <div class="field"><strong>Recommender Name:</strong> <span id="recommenderName"></span></div>
+      <div class="field"><strong>Recommender Team:</strong> <span id="recommenderDept"></span></div>
+    </div>
+
+    <hr>
+
+    <form id="recForm">
+
+      <p><strong>Recommendation Status (Choose One)</strong></p>
+
+      <div class="scale">
+        <label>
+          <input type="radio" name="status" value="Strongly Recommend" required>
+          Strongly Recommend
+        </label>
+
+        <label>
+          <input type="radio" name="status" value="Recommend" required>
+          Recommend
+        </label>
+
+        <label>
+          <input type="radio" name="status" value="Neutral" required>
+          Neutral
+        </label>
+
+        <label>
+          <input type="radio" name="status" value="Not Recommend" required>
+          Not Recommend
+        </label>
+
+        <label>
+          <input type="radio" name="status" value="Strongly Not Recommend" required>
+          Strongly Not Recommend
+        </label>
+      </div>
+
+      <p><strong>Reason for Recommendation</strong></p>
+      <textarea name="reason" required placeholder="Explain your recommendation in detail..."></textarea>
+
+      <button type="submit">Submit Recommendation</button>
+    </form>
+
+  </div>
+</div>
+
+<footer>
+  © 2026 Department Review System | Confidential & Secure
+</footer>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+
+document.getElementById("applicantName").innerText =
+  params.get("applicantName") || "—";
+
+document.getElementById("applicantDept").innerText =
+  params.get("applicantDept") || "—";
+
+document.getElementById("program").innerText =
+  params.get("program") || "—";
+
+document.getElementById("recommenderName").innerText =
+  params.get("recommenderName") || "—";
+
+document.getElementById("recommenderDept").innerText =
+  params.get("recommenderDept") || "—";
+</script>
+
+</body>
+</html>
