@@ -220,7 +220,7 @@ document.getElementById("recommenderDept").innerText =
 const form = document.getElementById("recForm");
 
 form.addEventListener("submit", async function(event) {
-  event.preventDefault();   // <-- CRITICAL
+  event.preventDefault();   // stop page reload
 
   const params = new URLSearchParams(window.location.search);
   const rowId = params.get("rowId");
@@ -239,35 +239,26 @@ form.addEventListener("submit", async function(event) {
     return;
   }
 
-  const payload = new URLSearchParams();
-  payload.append("rowId", rowId);
-  payload.append("token", token);
-  payload.append("recommendation", status);
-  payload.append("reason", reason);
+  const payload = {
+    rowId: rowId,
+    token: token,
+    recommendation: status,
+    reason: reason
+  };
 
   try {
     const res = await fetch(
       "https://script.google.com/macros/s/AKfycbwsKxJBILo0JUFc1qhl2qNWxdVWaMeku-VjxXDtDPeGaqx6j_Dv_Aw2AhHOX1DsSXUZHA/exec",
       {
         method: "POST",
-        body: payload,
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        }
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
       }
     );
 
-    const text = await res.text();   // <-- IMPORTANT
-    console.log("Server raw response:", text);
+    const text = await res.text();
+    console.log("Raw server response:", text);
 
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch (e) {
-      throw new Error("Server returned invalid JSON");
-    }
-
-    // Show clear success message ON THE PAGE
     document.body.innerHTML += `
       <div style="
         margin:20px auto;
@@ -279,7 +270,7 @@ form.addEventListener("submit", async function(event) {
         color:#065f46;
         border-radius:8px;
         font-weight:bold;">
-        ✅ Recommendation saved successfully!
+        ✅ Recommendation submitted successfully!
       </div>
     `;
 
@@ -292,6 +283,7 @@ form.addEventListener("submit", async function(event) {
 
 </body>
 </html>
+
 
 
 
