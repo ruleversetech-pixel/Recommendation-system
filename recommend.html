@@ -198,11 +198,29 @@
 <footer>
   © 2026 Department Review System | Confidential & Secure
 </footer>
+  <script>
+const params = new URLSearchParams(window.location.search);
+
+document.getElementById("applicantName").innerText =
+  params.get("applicantName") || "—";
+
+document.getElementById("applicantDept").innerText =
+  params.get("applicantDept") || "—";
+
+document.getElementById("program").innerText =
+  params.get("program") || "—";
+
+document.getElementById("recommenderName").innerText =
+  params.get("recommenderName") || "—";
+
+document.getElementById("recommenderDept").innerText =
+  params.get("recommenderDept") || "—";
+</script>
 <script>
 const form = document.getElementById("recForm");
 
 form.addEventListener("submit", function(event) {
-  event.preventDefault();
+  event.preventDefault();   // <-- VERY IMPORTANT
 
   const params = new URLSearchParams(window.location.search);
 
@@ -214,8 +232,13 @@ form.addEventListener("submit", function(event) {
     return;
   }
 
-  const status = document.querySelector('input[name="status"]:checked').value;
+  const status = document.querySelector('input[name="status"]:checked')?.value;
   const reason = document.querySelector('textarea[name="reason"]').value;
+
+  if (!status || !reason) {
+    alert("Please select a recommendation and write a reason.");
+    return;
+  }
 
   const payload = new URLSearchParams();
   payload.append("rowId", rowId);
@@ -225,20 +248,36 @@ form.addEventListener("submit", function(event) {
 
   fetch("https://script.google.com/macros/s/AKfycbwsKxJBILo0JUFc1qhl2qNWxdVWaMeku-VjxXDtDPeGaqx6j_Dv_Aw2AhHOX1DsSXUZHA/exec", {
     method: "POST",
-    body: payload
+    body: payload,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    }
   })
-  .then(res => res.json())
-  .then(data => {
-    alert(data.message);
+  .then(res => res.text())
+  .then(text => {
+    console.log("Raw response:", text);
+
+    try {
+      const data = JSON.parse(text);
+      alert(data.message);
+
+      // Optional: show success message on page
+      document.body.innerHTML += "<p style='color:green;text-align:center;'>Submission saved successfully.</p>";
+
+    } catch (err) {
+      alert("Server error — check Apps Script Executions.");
+    }
   })
   .catch(err => {
-    alert("Error sending data: " + err.message);
+    alert("Network error: " + err.message);
   });
 });
 </script>
 
+
 </body>
 </html>
+
 
 
 
