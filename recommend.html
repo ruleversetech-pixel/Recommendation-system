@@ -217,7 +217,7 @@ document.getElementById("recommenderDept").innerText =
   params.get("recommenderDept") || "—";
 </script>
 
-  <script>
+ <script>
 const form = document.getElementById("recForm");
 
 form.addEventListener("submit", async function(event) {
@@ -239,7 +239,7 @@ form.addEventListener("submit", async function(event) {
     return;
   }
 
-  // IMPORTANT: Use URL-encoded format (Apps Script friendly)
+  // === APPS SCRIPT FRIENDLY FORMAT ===
   const payload = new URLSearchParams();
   payload.append("rowId", rowId);
   payload.append("recommendation", status);
@@ -270,6 +270,7 @@ form.addEventListener("submit", async function(event) {
 
 </body>
 </html>
+
 
 
 
