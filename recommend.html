@@ -189,7 +189,7 @@
       <p><strong>Reason for Recommendation</strong></p>
       <textarea name="reason" required placeholder="Explain your recommendation in detail..."></textarea>
 
-      <button type="submit">Submit Recommendation</button>
+      <button type="submit">Submit Recommendations</button>
     </form>
 
   </div>
@@ -198,7 +198,7 @@
 <footer>
   © 2026 Department Review System | Confidential & Secure
 </footer>
-  <script>
+<script>
 const params = new URLSearchParams(window.location.search);
 
 document.getElementById("applicantName").innerText =
@@ -220,14 +220,13 @@ document.getElementById("recommenderDept").innerText =
 const form = document.getElementById("recForm");
 
 form.addEventListener("submit", async function(event) {
-  event.preventDefault();   // stop page reload
+  event.preventDefault();
 
   const params = new URLSearchParams(window.location.search);
   const rowId = params.get("rowId");
-  const token = params.get("token");
 
-  if (!rowId || !token) {
-    alert("Invalid or missing secure link.");
+  if (!rowId) {
+    alert("Missing rowId in URL.");
     return;
   }
 
@@ -241,14 +240,13 @@ form.addEventListener("submit", async function(event) {
 
   const payload = {
     rowId: rowId,
-    token: token,
     recommendation: status,
     reason: reason
   };
 
   try {
     const res = await fetch(
-      "https://script.google.com/macros/s/AKfycbwsKxJBILo0JUFc1qhl2qNWxdVWaMeku-VjxXDtDPeGaqx6j_Dv_Aw2AhHOX1DsSXUZHA/exec",
+      "https://script.google.com/macros/s/AKfycby91ftUExjdJ2Gw1DwsPWWjFvVzWMsPE7N0QiYwPLBxhl5a8HPx64izoFxiiD4oodsUmA/exec",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -257,25 +255,12 @@ form.addEventListener("submit", async function(event) {
     );
 
     const text = await res.text();
-    console.log("Raw server response:", text);
+    console.log("Server response:", text);
 
-    document.body.innerHTML += `
-      <div style="
-        margin:20px auto;
-        max-width:700px;
-        padding:15px;
-        text-align:center;
-        background:#e6fffa;
-        border:1px solid #38bdf8;
-        color:#065f46;
-        border-radius:8px;
-        font-weight:bold;">
-        ✅ Recommendation submitted successfully!
-      </div>
-    `;
+    alert("Recommendation submitted successfully!");
 
   } catch (err) {
-    alert("Submission error: " + err.message);
+    alert("Error sending data: " + err.message);
   }
 });
 </script>
@@ -283,6 +268,7 @@ form.addEventListener("submit", async function(event) {
 
 </body>
 </html>
+
 
 
 
