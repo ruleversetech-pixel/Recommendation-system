@@ -216,7 +216,8 @@ document.getElementById("recommenderName").innerText =
 document.getElementById("recommenderDept").innerText =
   params.get("recommenderDept") || "—";
 </script>
-<script>
+
+  <script>
 const form = document.getElementById("recForm");
 
 form.addEventListener("submit", async function(event) {
@@ -238,19 +239,18 @@ form.addEventListener("submit", async function(event) {
     return;
   }
 
-  const payload = {
-    rowId: rowId,
-    recommendation: status,
-    reason: reason
-  };
+  // IMPORTANT: Use URL-encoded format (Apps Script friendly)
+  const payload = new URLSearchParams();
+  payload.append("rowId", rowId);
+  payload.append("recommendation", status);
+  payload.append("reason", reason);
 
   try {
     const res = await fetch(
       "https://script.google.com/macros/s/AKfycbwsKxJBILo0JUFc1qhl2qNWxdVWaMeku-VjxXDtDPeGaqx6j_Dv_Aw2AhHOX1DsSXUZHA/exec",
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: payload
       }
     );
 
@@ -260,14 +260,17 @@ form.addEventListener("submit", async function(event) {
     alert("Recommendation submitted successfully!");
 
   } catch (err) {
+    console.error("Fetch failed:", err);
     alert("Error sending data: " + err.message);
   }
 });
 </script>
 
 
+
 </body>
 </html>
+
 
 
 
